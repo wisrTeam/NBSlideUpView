@@ -30,6 +30,6 @@
 @property (nonatomic) BOOL shouldBlockSuperviewTouchesWhileUp;
 
 @property (nonatomic, strong) UIView *contentView;
-@property (nonatomic, strong) id<NBSlideUpViewDelegate> delegate;
+@property (nonatomic, weak) id<NBSlideUpViewDelegate> delegate;
 
 @end
