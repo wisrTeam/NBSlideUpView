@@ -59,6 +59,12 @@
     return self;
 }
 
+-(void)setShouldTapSuperviewToAnimateOut:(BOOL)shouldTapSuperviewToAnimateOut
+{
+    _shouldBlockSuperviewTouchesWhileUp = shouldTapSuperviewToAnimateOut;
+    self.overlayView.hidden = !_shouldBlockSuperviewTouchesWhileUp;
+}
+
 - (void)setViewablePixels:(CGFloat)viewablePixels {
     _viewablePixels = viewablePixels;
     if (self.superview) {
