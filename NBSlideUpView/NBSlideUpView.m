@@ -59,6 +59,12 @@
     return self;
 }
 
+-(void)teardown
+{
+    [self.overlayView removeFromSuperview];
+    [self removeFromSuperview];
+}
+
 -(void)setShouldTapSuperviewToAnimateOut:(BOOL)shouldTapSuperviewToAnimateOut
 {
     _shouldBlockSuperviewTouchesWhileUp = shouldTapSuperviewToAnimateOut;
@@ -103,6 +109,7 @@
 }
 
 - (void)animateIn {
+    __weak typeof(self) weakSelf = self;
     if (self.shouldBlockSuperviewTouchesWhileUp) {
         self.overlayView.userInteractionEnabled = YES;
     }
@@ -112,21 +119,24 @@
           initialSpringVelocity:self.initialSpringVelocity
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^(void) {
-                         self.frame = CGRectMake(self.frame.origin.x,
-                                                 self.superview.frame.size.height - self.viewablePixels,
-                                                 self.frame.size.width,
-                                                 self.frame.size.height);
-                         if (self.shouldDarkenSuperview) {
-                             [self.overlayView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.26]];
+                         __strong typeof(weakSelf) strongSelf = weakSelf;
+                         strongSelf.frame = CGRectMake(strongSelf.frame.origin.x,
+                                                 strongSelf.superview.frame.size.height - strongSelf.viewablePixels,
+                                                 strongSelf.frame.size.width,
+                                                 strongSelf.frame.size.height);
+                         if (strongSelf.shouldDarkenSuperview) {
+                             [strongSelf.overlayView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.26]];
                          }
                      } completion:^(BOOL completed){
-                         if ([self.delegate respondsToSelector:@selector(slideUpViewDidAnimateIn:)]) {
-                             [self.delegate slideUpViewDidAnimateIn:self];
+                         __strong typeof(weakSelf) strongSelf = weakSelf;
+                         if ([strongSelf.delegate respondsToSelector:@selector(slideUpViewDidAnimateIn:)]) {
+                             [strongSelf.delegate slideUpViewDidAnimateIn:strongSelf];
                          }
                      }];
 }
 
 - (void)animateOut {
+    __weak typeof(self) weakSelf = self;
     self.overlayView.userInteractionEnabled = NO;
     [UIView animateWithDuration:self.animateInOutTime
                           delay:0
@@ -134,14 +144,16 @@
           initialSpringVelocity:self.initialSpringVelocity
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^(void) {
-                         self.frame = CGRectMake(self.frame.origin.x,
-                                                 self.superview.frame.size.height,
-                                                 self.frame.size.width,
-                                                 self.frame.size.height);
-                         [self.overlayView setBackgroundColor:[UIColor clearColor]];
+                         __strong typeof(weakSelf) strongSelf = weakSelf;
+                         strongSelf.frame = CGRectMake(strongSelf.frame.origin.x,
+                                                 strongSelf.superview.frame.size.height,
+                                                 strongSelf.frame.size.width,
+                                                 strongSelf.frame.size.height);
+                         [strongSelf.overlayView setBackgroundColor:[UIColor clearColor]];
                      } completion:^(BOOL completed) {
-                         if ([self.delegate respondsToSelector:@selector(slideUpViewDidAnimateOut:)]) {
-                             [self.delegate slideUpViewDidAnimateOut:self];
+                         __strong typeof(weakSelf) strongSelf = weakSelf;
+                         if ([strongSelf.delegate respondsToSelector:@selector(slideUpViewDidAnimateOut:)]) {
+                             [strongSelf.delegate slideUpViewDidAnimateOut:strongSelf];
                          }
                      }];
 }

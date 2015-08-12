@@ -15,6 +15,7 @@
 - (id)initWithSuperview:(UIView *)superview viewableHeight:(CGFloat)viewablePixels;
 - (void)animateOut;
 - (void)animateIn;
+- (void)teardown;
 
 @property (nonatomic) CGFloat arrowAlpha;
 
